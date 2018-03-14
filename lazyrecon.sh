@@ -128,7 +128,7 @@ main(){
   then
     echo "This is a known target."
   else
-    mkdir ./$1
+    mkdir ~/BBP/$1
   fi
   mkdir ~/BBP/$1/$foldername
   mkdir ~/BBP/$1/$foldername/reports/
