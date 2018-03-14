@@ -45,7 +45,7 @@ subdomaintakeover(){
     ./domainwatch.sh scan ~/BBP/$1/$foldername/$1.txt >> ~/BBP/$1/$foldername/subdomain-takeover.txt
     echo -e "\n\nNext up, Aquatone-Takeover!\n\n"
     aquatone-takeover -d $1
-    cat ~/aquatone/$1/takeovers.json | jq '.' >> ~/BBP/$1/$foldername/subdomain-takeover.txt >
+    cat ~/aquatone/$1/takeovers.json | jq '.' >> ~/BBP/$1/$foldername/subdomain-takeover.txt
 }
 
 recon(){
