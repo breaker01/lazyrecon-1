@@ -41,7 +41,8 @@ screenshot(){
 
 subdomaintakeover(){
     echo -e "\n\nRunning subdomain takeover checks, starting with DomainWatch\n\n"
-    ./opt/DomainWatch/domainwatch.sh scan ~/BBP/$1/$foldername/$1.txt > ~/BBP/$1/$foldername/subdomain-takeover.txt
+    cd /opt/DomainWatch/
+    ./domainwatch.sh scan ~/BBP/$1/$foldername/$1.txt > ~/BBP/$1/$foldername/subdomain-takeover.txt
     echo -e "\n\nNext up, Aquatone-Takeover!\n\n"
     aquatone-takeover -d $1
     cat ~/aquatone/$1/takeovers.json | jq | tee -a ~/BBP/$1/$foldername/subdomain-takeover.txt > /dev/null
@@ -133,7 +134,6 @@ main(){
   mkdir ~/BBP/$1/$foldername
   mkdir ~/BBP/$1/$foldername/reports/
   mkdir ~/BBP/$1/$foldername/screenshots/
-  touch ~/BBP/$1/$foldername/nmap-report.xml
   touch ~/BBP/$1/$foldername/unreachable.html
   touch ~/BBP/$1/$foldername/subdomain-takeover.txt
   touch ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
