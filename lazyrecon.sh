@@ -124,7 +124,7 @@ main(){
   clear
   logo
 
-  if [ -d "./$1" ]
+  if [ -d "~/BBP/$1" ]
   then
     echo "This is a known target."
   else
