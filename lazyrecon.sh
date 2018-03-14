@@ -139,7 +139,7 @@ main(){
 
     recon $1
 }
-logo
+
 if [[ -z $@ ]]; then
   echo "Error: No target specified."
   echo "Usage: sudo ./lazyrecon.sh <target>"
