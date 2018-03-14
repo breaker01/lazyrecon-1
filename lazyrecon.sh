@@ -26,7 +26,7 @@ hostalive(){
     if [ $(curl --write-out %{http_code} --silent --output /dev/null -m 5 $line) = 000 ]
     then
       echo "$line was unreachable."
-      sudo touch ./$1/$foldername/unreachable.html
+      touch ./$1/$foldername/unreachable.html
       echo "<b>$line</b> was unreachable<br>" >> ./$1/$foldername/unreachable.html
     else
       echo "$line is up"
@@ -37,28 +37,28 @@ hostalive(){
 
 screenshot(){
     echo "Taking a screenshot of $line"
-    sudo python /opt/EyeWitness/EyeWitness.py --headless -d ./$1/$foldername/screenshots/ -i ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10
+    python /opt/EyeWitness/EyeWitness.py --headless -d ./$1/$foldername/screenshots/ -i ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10
 }
 
 subdomaintakeover(){
     echo "Running subdomain takeover checks..."
-    sudo /opt/DomainWatch/domainwatch.sh scan ./$1/$foldername/$1.txt | sudo tee ./$1/$foldername/subdomain-takeover.txt > /dev/null
-    sudo aquatone-takeover -d $1
-    cat ~/aquatone/$1/takeovers.json | jq | sudo tee -a ./$1/$foldername/subdomain-takeover.txt > /dev/null
+    ./opt/DomainWatch/domainwatch.sh scan ./$1/$foldername/$1.txt > ./$1/$foldername/subdomain-takeover.txt
+    aquatone-takeover -d $1
+    cat ~/aquatone/$1/takeovers.json | jq | tee -a ./$1/$foldername/subdomain-takeover.txt > /dev/null
 }
 
 recon(){
   echo "Doing subdomain enumeration..."
-  sudo python /opt/Sublist3r/sublist3r.py -d $1 -t 10 -v -o ./$1/$foldername/$1.txt
-  sudo aquatone-discover -d $1
-  sudo sed "s/,.*//" ~/aquatone/$1/hosts.txt | sudo tee -a ./$1/$foldername/$1.txt > /dev/null
+  python /opt/Sublist3r/sublist3r.py -d $1 -t 10 -v -o ./$1/$foldername/$1.txt
+  aquatone-discover -d $1
+  sed "s/,.*//" ~/aquatone/$1/hosts.txt > ./$1/$foldername/$1.txt
   curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1 >> ./$1/$foldername/$1.txt
   discovery $1
-  cat ./$1/$foldername/$1.txt | sort -u | sudo tee ./$1/$foldername/$1.txt > /dev/null
+  cat ./$1/$foldername/$1.txt | sort -u > ./$1/$foldername/$1.txt
 }
 
 report(){
-  sudo touch ./$1/$foldername/reports/$line.html
+  touch ./$1/$foldername/reports/$line.html
   echo "<title> report for $line </title>" >> ./$1/$foldername/reports/$line.html
   echo "<html>" >> ./$1/$foldername/reports/$line.html
   echo "<head>" >> ./$1/$foldername/reports/$line.html
@@ -71,10 +71,6 @@ report(){
 
   echo "   <div clsas=\"row\">" >> ./$1/$foldername/reports/$line.html
   echo "     <div class=\"col-sm-6\">" >> ./$1/$foldername/reports/$line.html
-  echo "     <div style=\"font-family: 'Mina', serif;\"><h2>Dirsearch</h2></div>" >> ./$1/$foldername/reports/$line.html
-  echo "<pre>" >> ./$1/$foldername/reports/$line.html
-  cat ~/tools/dirsearch/reports/$line/* | while read rline; do echo "$rline" >> ./$1/$foldername/reports/$line.html
-  done
   echo "</pre>   </div>" >> ./$1/$foldername/reports/$line.html
 
   echo "     <div class=\"col-sm-6\">" >> ./$1/$foldername/reports/$line.html
@@ -102,7 +98,7 @@ report(){
   echo "<div style=\"font-family: 'Mina', serif;\"><h1>Nmap Results</h1></div>" >> ./$1/$foldername/reports/$line.html
   echo "<pre>" >> ./$1/$foldername/reports/$line.html
   echo "nmap -sV -T3 -Pn -p3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443" >> ./$1/$foldername/reports/$line.html
-  sudo nmap -sV -T3 -Pn -p3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443 $line -oX ./$1/$foldername/nmap-report.xml
+  nmap -sV -T3 -Pn -p3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443 $line -oX ./$1/$foldername/nmap-report.xml
   echo "</pre></div>" >> ./$1/$foldername/reports/$line.html
 
 
@@ -131,15 +127,15 @@ main(){
   then
     echo "This is a known target."
   else
-    sudo mkdir ./$1
+    mkdir ./$1
   fi
-  sudo mkdir ./$1/$foldername
-  sudo mkdir ./$1/$foldername/reports/
-  sudo mkdir ./$1/$foldername/screenshots/
-  sudo touch ./$1/$foldername/nmap-report.xml
-  sudo touch ./$1/$foldername/unreachable.html
-  sudo touch ./$1/$foldername/subdomain-takeover.txt
-  sudo touch ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
+  mkdir ./$1/$foldername
+  mkdir ./$1/$foldername/reports/
+  mkdir ./$1/$foldername/screenshots/
+  touch ./$1/$foldername/nmap-report.xml
+  touch ./$1/$foldername/unreachable.html
+  touch ./$1/$foldername/subdomain-takeover.txt
+  touch ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
 
     recon $1
 }
