@@ -8,7 +8,7 @@ discovery(){
   cat ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | sort -u | while read line; do
     sleep 1
     report $1 $line
-    echo "\n$line report generated.\n\n"
+    echo -e "\n$line report generated.\n\n"
     sleep 1
   done
 }
@@ -35,14 +35,14 @@ hostalive(){
 }
 
 screenshot(){
-    echo "\n\nTaking a screenshot of $line\n\n"
+    echo -e "\n\nTaking a screenshot of $line\n\n"
     python /opt/EyeWitness/EyeWitness.py --headless -d ~/BBP/$1/$foldername/screenshots/ -f ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10
 }
 
 subdomaintakeover(){
-    echo "\n\nRunning subdomain takeover checks, starting with DomainWatch\n\n"
+    echo -e "\n\nRunning subdomain takeover checks, starting with DomainWatch\n\n"
     ./opt/DomainWatch/domainwatch.sh scan ~/BBP/$1/$foldername/$1.txt > ~/BBP/$1/$foldername/subdomain-takeover.txt
-    echo "\n\nNext up, Aquatone-Takeover!\n\n"
+    echo -e "\n\nNext up, Aquatone-Takeover!\n\n"
     aquatone-takeover -d $1
     cat ~/aquatone/$1/takeovers.json | jq | tee -a ~/BBP/$1/$foldername/subdomain-takeover.txt > /dev/null
 }
