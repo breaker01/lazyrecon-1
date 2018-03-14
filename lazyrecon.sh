@@ -2,29 +2,31 @@
 
 discovery(){
   hostalive $1
+  subdomaintakeover $1
   screenshot $1
   cleanup $1
+  cd ~/BBP/
   cat ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | sort -u | while read line; do
     sleep 1
-    dirsearcher $line
     report $1 $line
-    echo "$line report generated"
+    echo "$line report generated."
     sleep 1
   done
 }
 
 cleanup(){
-  cd ./$1/$foldername/screenshots/
-  rename 's/_/-/g' -- *
+  cd ~/BBP/$1/$foldername/screenshots/
+  sudo rename 's/_/-/g' -- *
   cd $path
 }
 
 hostalive(){
+  cd ~/BBP/
   cat ./$1/$foldername/$1.txt | sort -u | while read line; do
     if [ $(curl --write-out %{http_code} --silent --output /dev/null -m 5 $line) = 000 ]
     then
-      echo "$line was unreachable"
-      touch ./$1/$foldername/unreachable.html
+      echo "$line was unreachable."
+      sudo touch ./$1/$foldername/unreachable.html
       echo "<b>$line</b> was unreachable<br>" >> ./$1/$foldername/unreachable.html
     else
       echo "$line is up"
@@ -34,26 +36,29 @@ hostalive(){
 }
 
 screenshot(){
-    echo "taking a screenshot of $line"
-    python ~/tools/webscreenshot/webscreenshot.py -o ./$1/$foldername/screenshots/ -i ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout=10 -m
+    echo "Taking a screenshot of $line"
+    sudo python /opt/EyeWitness/EyeWitness.py --headless -d ./$1/$foldername/screenshots/ -i ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10
+}
+
+subdomaintakeover(){
+    echo "Running subdomain takeover checks..."
+    sudo /opt/DomainWatch/domainwatch.sh scan ./$1/$foldername/$1.txt | sudo tee ./$1/$foldername/subdomain-takeover.txt > /dev/null
+    sudo aquatone-takeover -d $1
+    cat ~/aquatone/$1/takeovers.json | jq | sudo tee -a ./$1/$foldername/subdomain-takeover.txt > /dev/null
 }
 
 recon(){
-
-  python ~/tools/Sublist3r/sublist3r.py -d $1 -t 10 -v -o ./$1/$foldername/$1.txt
+  echo "Doing subdomain enumeration..."
+  sudo python /opt/Sublist3r/sublist3r.py -d $1 -t 10 -v -o ./$1/$foldername/$1.txt
+  sudo aquatone-discover -d $1
+  sudo sed "s/,.*//" ~/aquatone/$1/hosts.txt | sudo tee -a ./$1/$foldername/$1.txt > /dev/null
   curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1 >> ./$1/$foldername/$1.txt
   discovery $1
-  cat ./$1/$foldername/$1.txt | sort -u > ./$1/$foldername/$1.txt
-
+  cat ./$1/$foldername/$1.txt | sort -u | sudo tee ./$1/$foldername/$1.txt > /dev/null
 }
-
-dirsearcher(){
-  python3 ~/tools/dirsearch/dirsearch.py -e php,asp,aspx,jsp,html,zip,jar,sql -u $line
-}
-
 
 report(){
-  touch ./$1/$foldername/reports/$line.html
+  sudo touch ./$1/$foldername/reports/$line.html
   echo "<title> report for $line </title>" >> ./$1/$foldername/reports/$line.html
   echo "<html>" >> ./$1/$foldername/reports/$line.html
   echo "<head>" >> ./$1/$foldername/reports/$line.html
@@ -97,7 +102,7 @@ report(){
   echo "<div style=\"font-family: 'Mina', serif;\"><h1>Nmap Results</h1></div>" >> ./$1/$foldername/reports/$line.html
   echo "<pre>" >> ./$1/$foldername/reports/$line.html
   echo "nmap -sV -T3 -Pn -p3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443" >> ./$1/$foldername/reports/$line.html
-  nmap -sV -T3 -Pn -p3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443 $line >> ./$1/$foldername/reports/$line.html
+  sudo nmap -sV -T3 -Pn -p3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443 $line -oX ./$1/$foldername/nmap-report.xml
   echo "</pre></div>" >> ./$1/$foldername/reports/$line.html
 
 
@@ -106,7 +111,6 @@ report(){
 }
 
 logo(){
-  #can't have a bash script without a cool logo :D
   echo "
 
   _     ____  ____ ___  _ ____  _____ ____ ____  _
@@ -119,6 +123,7 @@ logo(){
 }
 
 main(){
+  cd ~/BBP/
   clear
   logo
 
@@ -126,20 +131,22 @@ main(){
   then
     echo "This is a known target."
   else
-    mkdir ./$1
+    sudo mkdir ./$1
   fi
-  mkdir ./$1/$foldername
-  mkdir ./$1/$foldername/reports/
-  mkdir ./$1/$foldername/screenshots/
-  touch ./$1/$foldername/unreachable.html
-  touch ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
+  sudo mkdir ./$1/$foldername
+  sudo mkdir ./$1/$foldername/reports/
+  sudo mkdir ./$1/$foldername/screenshots/
+  sudo touch ./$1/$foldername/nmap-report.xml
+  sudo touch ./$1/$foldername/unreachable.html
+  sudo touch ./$1/$foldername/subdomain-takeover.txt
+  sudo touch ./$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
 
     recon $1
 }
 logo
 if [[ -z $@ ]]; then
-  echo "Error: no targets specified."
-  echo "Usage: ./lazyrecon.sh <target>"
+  echo "Error: No target specified."
+  echo "Usage: sudo ./lazyrecon.sh <target>"
   exit 1
 fi
 
