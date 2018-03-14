@@ -101,7 +101,7 @@ report(){
   echo "<div style=\"font-family: 'Mina', serif;\"><h1>Nmap Results</h1></div>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "<pre>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "nmap -sV -T3 -Pn -p80,443,3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443" >> ~/BBP/$1/$foldername/reports/$line.html
-  nmap -sV -T3 -Pn -p80,443,3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443 $line -oX ~/BBP/$1/$foldername/nmap-report.xml
+  nmap -sV -T3 -Pn -p80,443,3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443 -iL ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -oX ~/BBP/$1/$foldername/nmap-report.xml
   echo "</pre></div>" >> ./$1/$foldername/reports/$line.html
 
 
@@ -133,7 +133,6 @@ main(){
   fi
   mkdir ~/BBP/$1/$foldername
   mkdir ~/BBP/$1/$foldername/reports/
-  mkdir ~/BBP/$1/$foldername/screenshots/
   touch ~/BBP/$1/$foldername/unreachable.html
   touch ~/BBP/$1/$foldername/subdomain-takeover.txt
   touch ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
