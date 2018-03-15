@@ -20,9 +20,7 @@ This script is intended to automate your reconnaissance process in an organized 
 - Check if subdomain takeovers are possible with Aquatone and DomainWatch
 - Grab a screenshot of responsive hosts using EyeWitness
 - Grab the response header
-- Perform nmap 
+- Perform Nmap 
 - Generate a HTML report with output from the tools above
 
-This requires [Bug Bounty Hunting Tools](https://github.com/nahamsec/bbht) in order for the tools to work. 
-
-**Warning:** This code was originally created for personal use for myself, so it's  a bit messy and hopefully it'll be cleaned up with more features in a later release.
+This requires [Bug Bounty Hunting Tools](https://github.com/nahamsec/bbht) in order for the tools to work.
