@@ -20,7 +20,7 @@ cleanup(){
 }
 
 hostalive(){
-    echo -e "\n\nChecking if which hosts are online...\n\n"
+    echo -e "Checking if which hosts are online...\n\n"
     cat ~/BBP/$1/$foldername/$1.txt | sort -u | while read line; do
     if [ $(curl --write-out %{http_code} --silent --output /dev/null -m 5 $line) = 000 ]
     then
@@ -36,7 +36,7 @@ hostalive(){
 
 screenshot(){
     echo -e "\n\nTaking a screenshot of $line\n\n"
-    python /opt/EyeWitness/EyeWitness.py --headless -d ~/BBP/$1/$foldername/screenshots/ -f ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10
+    python /opt/EyeWitness/EyeWitness.py --headless -d ~/BBP/$1/$foldername/screenshots/ -f ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10 --only-ports 80,443 --no-prompt
 }
 
 subdomaintakeover(){
@@ -80,7 +80,7 @@ report(){
   echo "<div style=\"font-family: 'Mina', serif;\"><h2>Screeshot</h2></div>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "<pre>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "Port 80                              Port 443" >> ~/BBP/$1/$foldername/reports/$line.html
-  echo "<img/src=\"../screenshots/http-$line-80.png\" style=\"max-width: 500px;\"> <img/src=\"../screenshots/https-$line-443.png\" style=\"max-width: 500px;\"> <br>" >> ./$1/$foldername/reports/$line.html
+  #echo "<img/src=\"~/BBP/$1/$foldername/screenshots/http-$line-80.png\" style=\"max-width: 500px;\"> <img/src=\"../screenshots/https-$line-443.png\" style=\"max-width: 500px;\"> <br>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "</pre>" >> ~/BBP/$1/$foldername/reports/$line.html
 
   echo "<div style=\"font-family: 'Mina', serif;\"><h2>Dig Info</h2></div>" >> ~/BBP/$1/$foldername/reports/$line.html
@@ -100,8 +100,8 @@ report(){
 
   echo "<div style=\"font-family: 'Mina', serif;\"><h1>Nmap Results</h1></div>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "<pre>" >> ~/BBP/$1/$foldername/reports/$line.html
-  echo "nmap -sV -T3 -Pn -p80,443,3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443" >> ~/BBP/$1/$foldername/reports/$line.html
-  nmap -sV -T3 -Pn -p80,443,3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,443,7447,7080,8880,8983,5673,7443 -iL ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -oX ~/BBP/$1/$foldername/nmap-report.xml
+  echo "nmap -sV -T3 -Pn -p80,443,3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,7447,7080,8880,8983,5673,7443" >> ~/BBP/$1/$foldername/reports/$line.html
+  nmap -sV -T3 -Pn -p80,443,3868,3366,8443,8080,9443,9091,3000,8000,5900,8081,6000,10000,8181,3306,5000,4000,8888,5432,15672,9999,161,4044,7077,4040,9000,8089,7447,7080,8880,8983,5673,7443 -iL ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -oX ~/BBP/$1/$foldername/nmap-report.xml
   echo "</pre></div>" >> ./$1/$foldername/reports/$line.html
 
 
