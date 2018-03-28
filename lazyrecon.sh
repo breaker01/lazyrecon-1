@@ -80,7 +80,6 @@ report(){
   echo "<div style=\"font-family: 'Mina', serif;\"><h2>Screeshot</h2></div>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "<pre>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "Port 80                              Port 443" >> ~/BBP/$1/$foldername/reports/$line.html
-  #echo "<img/src=\"~/BBP/$1/$foldername/screenshots/http-$line-80.png\" style=\"max-width: 500px;\"> <img/src=\"../screenshots/https-$line-443.png\" style=\"max-width: 500px;\"> <br>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "</pre>" >> ~/BBP/$1/$foldername/reports/$line.html
 
   echo "<div style=\"font-family: 'Mina', serif;\"><h2>Dig Info</h2></div>" >> ~/BBP/$1/$foldername/reports/$line.html
@@ -100,7 +99,7 @@ report(){
 
   echo "<div style=\"font-family: 'Mina', serif;\"><h1>Nmap Results</h1></div>" >> ~/BBP/$1/$foldername/reports/$line.html
   echo "<pre>" >> ~/BBP/$1/$foldername/reports/$line.html
-  nmap -sV -T3 -Pn -iL ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -oX ~/BBP/$1/$foldername/nmap-report.xml
+  nmap -sV -T3 -Pn -iL ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -oN ~/BBP/$1/$foldername/nmap-report.txt
   echo "</pre></div>" >> ./$1/$foldername/reports/$line.html
   
   echo "<div style=\"font-family: 'Mina', serif;\"><h1>BFAC Results</h1></div>" >> ~/BBP/$1/$foldername/reports/$line.html
