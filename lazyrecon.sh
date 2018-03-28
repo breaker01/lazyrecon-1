@@ -36,7 +36,7 @@ hostalive(){
 
 screenshot(){
     echo -e "\n\nTaking a screenshot of $line\n\n"
-    python /opt/EyeWitness/EyeWitness.py --headless -d ~/BBP/$1/$foldername/screenshots/ -f ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10 --only-ports 80,443 --no-prompt
+    python /opt/EyeWitness/EyeWitness.py --headless --prepend-https -d ~/BBP/$1/$foldername/screenshots/ -f ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10 --only-ports 80,443 --no-prompt
 }
 
 subdomaintakeover(){
