@@ -44,15 +44,15 @@ subdomaintakeover(){
     cd /opt/DomainWatch/
     ./domainwatch.sh scan ~/BBP/$1/$foldername/$1.txt >> ~/BBP/$1/$foldername/subdomain-takeover.txt
     echo -e "\n\nNext up, Aquatone-Takeover!\n\n"
-    aquatone-takeover -d $1
+    aquatone-takeover --nameservers 1.1.1.1 -t 10 -d $1
     cat ~/aquatone/$1/takeovers.json | jq '.' >> ~/BBP/$1/$foldername/subdomain-takeover.txt
 }
 
 recon(){
   echo -e "Doing subdomain enumeration, starting with Sublist3r!\n\n"
-  python /opt/Sublist3r/sublist3r.py -d $1 -t 10 -v -o ~/BBP/$1/$foldername/$1.txt
+  python /opt/Sublist3r/sublist3r.py -d $1 -b -t 10 -v -o ~/BBP/$1/$foldername/$1.txt
   echo -e "\n\nNext up, Aquatone-Discover!"
-  aquatone-discover -d $1
+  aquatone-discover --nameservers 1.1.1.1 -t 10 -d $1
   sed "s/,.*//" ~/aquatone/$1/hosts.txt >> ~/BBP/$1/$foldername/$1.txt
   echo -e "\n\nAnd now Certspotter!\n\n"
   curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1 >> ~/BBP/$1/$foldername/$1.txt
