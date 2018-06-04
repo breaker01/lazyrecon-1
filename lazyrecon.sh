@@ -101,12 +101,6 @@ report(){
   echo "<pre>" >> ~/BBP/$1/$foldername/reports/$line.html
   nmap -sS -sV -Pn -p- -iL ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -oN ~/BBP/$1/$foldername/nmap-report.txt
   echo "</pre></div>" >> ./$1/$foldername/reports/$line.html
-  
-  echo "<div style=\"font-family: 'Mina', serif;\"><h1>BFAC Results</h1></div>" >> ~/BBP/$1/$foldername/reports/$line.html
-  echo "<pre>" >> ~/BBP/$1/$foldername/reports/$line.html
-  bfac --list ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -xsc 302,400,404
-  echo "</pre></div>" >> ./$1/$foldername/reports/$line.html
-
 
   echo "</html>" >> ~/BBP/$1/$foldername/reports/$line.html
 
