@@ -16,7 +16,7 @@
 This script is intended to automate your reconnaissance process in an organized fashion by performing the following:
 
 - Create a dated folder with recon notes
-- Grab subdomains using Sublist3r, Aquatone, Subfinder and Certspotter
+- Grab subdomains using Sublist3r, Aquatone, Subfinder, amass and Certspotter
 - Check if subdomain takeovers are possible with Aquatone and DomainWatch
 - Grab a screenshot of responsive hosts using EyeWitness
 - Grab the response header
