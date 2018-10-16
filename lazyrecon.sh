@@ -54,13 +54,6 @@ recon(){
   echo -e "\n\nNext up, Aquatone-Discover!"
   aquatone-discover --nameservers 1.1.1.1,8.8.8.8 -t 10 -d $1
   sed "s/,.*//" ~/aquatone/$1/hosts.txt >> ~/BBP/$1/$foldername/$1.txt
-  echo -e "\n\nNext up, Subfinder!"
-  cd /opt/subfinder
-  ./subfinder -b -d $1 -fw -o ~/BBP/$1/$foldername/subfinder.txt -r -w ../SecLists/Discovery/DNS/subdomains-top1mil-110000.txt
-  cat ~/BBP/$1/$foldername/subfinder.txt >> ~/BBP/$1/$foldername/$1.txt
-  echo -e "\n\nNext up, amass!"
-  amass -v -d $1 -ip -o ~/BBP/$1/$foldername/amass.txt -r 8.8.8.8,1.1.1.1 -brute -whois
-  cat ~/BBP/$1/$foldername/amass.txt | cut -d"]" -f2 | cut -d, -f1 | tr -d ' ' >> ~/BBP/$1/$foldername/$1.txt
   echo -e "\n\nAnd now Certspotter!\n\n"
   curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1 >> ~/BBP/$1/$foldername/$1.txt
   discovery $1
