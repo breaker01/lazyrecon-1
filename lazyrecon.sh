@@ -43,7 +43,7 @@ wappalyze(){
 screenshot(){
     echo -e "\n\nTaking screenshots\n\n"
     cd /opt/aquatone/
-    cat ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | aquatone --ports xlarge
+    cat ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | ./aquatone --ports xlarge
     cd $path
 }
 
