@@ -68,10 +68,7 @@ recon(){
   echo -e "\n\nAnd now Certspotter!\n\n"
   curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1 >> ~/BBP/$1/$foldername/$1.txt
   discovery $1
-  cat ~/BBP/$1/$foldername/$1.txt | sort -u >> ~/BBP/$1/$foldername/$1.txt
-  echo -e "Running Wappalyze-It!\n\n"
-  python /opt/Wappalyze-it/wappalyze-it.py -i 
-  
+  cat ~/BBP/$1/$foldername/$1.txt | sort -u >> ~/BBP/$1/$foldername/$1.txt  
 }
 
 report(){
