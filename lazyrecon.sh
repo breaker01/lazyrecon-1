@@ -3,6 +3,7 @@
 discovery(){
   hostalive $1
   subdomaintakeover $1
+  wappalyze $1
   screenshot $1
   cleanup $1
   cat ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | sort -u | while read line; do
@@ -34,10 +35,16 @@ hostalive(){
   done
 }
 
+wappalyze(){
+    echo -e "\n\nRunning Wappalye-It\n\n"
+    python /opt/Wappalyze-it/wappalyze-it.py -i ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -o wappalyze.txt
+}
+
 screenshot(){
     echo -e "\n\nTaking screenshots\n\n"
     cd /opt/aquatone/
     cat ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | aquatone --ports xlarge
+    cd $path
 }
 
 subdomaintakeover(){
@@ -62,6 +69,9 @@ recon(){
   curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1 >> ~/BBP/$1/$foldername/$1.txt
   discovery $1
   cat ~/BBP/$1/$foldername/$1.txt | sort -u >> ~/BBP/$1/$foldername/$1.txt
+  echo -e "Running Wappalyze-It!\n\n"
+  python /opt/Wappalyze-it/wappalyze-it.py -i 
+  
 }
 
 report(){
