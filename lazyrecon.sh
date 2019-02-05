@@ -36,7 +36,8 @@ hostalive(){
 
 screenshot(){
     echo -e "\n\nTaking screenshots\n\n"
-    cat ~/BBP/$1/$foldername/screenshots/responsive-$(date +"%Y-%m-%d").txt | aquatone
+    cd /opt/aquatone/
+    cat ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | aquatone --ports xlarge
 }
 
 subdomaintakeover(){
