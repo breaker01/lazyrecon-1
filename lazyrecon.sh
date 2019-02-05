@@ -35,8 +35,8 @@ hostalive(){
 }
 
 screenshot(){
-    echo -e "\n\nTaking a screenshot of $line\n\n"
-    python /opt/EyeWitness/EyeWitness.py --web --prepend-https -d ~/BBP/$1/$foldername/screenshots/ -f ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt --timeout 10 --no-prompt
+    echo -e "\n\nTaking screenshots\n\n"
+    cat ~/BBP/$1/$foldername/screenshots/responsive-$(date +"%Y-%m-%d").txt | aquatone
 }
 
 subdomaintakeover(){
