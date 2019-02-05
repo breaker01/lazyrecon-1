@@ -22,17 +22,7 @@ cleanup(){
 
 hostalive(){
     echo -e "Checking if which hosts are online...\n\n"
-    cat ~/BBP/$1/$foldername/$1.txt | sort -u | while read line; do
-    if [ $(curl --write-out %{http_code} --silent --output /dev/null -m 5 $line) = 000 ]
-    then
-      echo "$line was unreachable."
-      touch ~/BBP/$1/$foldername/unreachable.html
-      echo "<b>$line</b> was unreachable<br>" >> ~/BBP/$1/$foldername/unreachable.html
-    else
-      echo "$line is up"
-      echo $line >> ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
-    fi
-  done
+    cat ~/BBP/$1/$foldername/$1.txt | httprobe | awk -F[/:] '{print $4}' | sort -u >> ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
 }
 
 wappalyze(){
