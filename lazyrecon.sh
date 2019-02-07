@@ -130,6 +130,7 @@ main(){
   fi
   mkdir ~/BBP/$1/$foldername
   mkdir ~/BBP/$1/$foldername/reports/
+  mkdir ~/BBP/$1/$foldername/screenshots/
   touch ~/BBP/$1/$foldername/unreachable.html
   touch ~/BBP/$1/$foldername/subdomain-takeover.txt
   touch ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
