@@ -22,7 +22,9 @@ cleanup(){
 
 hostalive(){
     echo -e "Checking if which hosts are online...\n\n"
-    cat ~/BBP/$1/$foldername/$1.txt | httprobe | awk -F[/:] '{print $4}' | sort -u >> ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
+    cd /opt/httprobe/
+    cat ~/BBP/$1/$foldername/$1.txt | ./httprobe | awk -F[/:] '{print $4}' | sort -u >> ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
+    cd $path
 }
 
 wappalyze(){
