@@ -54,9 +54,11 @@ recon(){
   echo -e "\n\nNext up, Aquatone-Discover!"
   aquatone-discover --nameservers 1.1.1.1,8.8.8.8 -t 10 -d $1
   sed "s/,.*//" ~/aquatone/$1/hosts.txt >> ~/BBP/$1/$foldername/$1.txt
-  echo -e "\n\nNext up, FDNS script!"
-  domain="\.${1//\./\\.}\","
-  pv /opt/2019-01-25-1548374703-fdns_any.json.gz | pigz -dc | grep -E ${domain} | jq -r .name >> ~/BBP/$1/$foldername/$1.txt
+  echo -e "\n\nNext up, DNSGrep!"
+  curl -s "https://dns.bufferover.run/dns?q=$1" | jq '.FDNS_A[]' | cut -f2 -d"," | sed 's/.$//' | sort -u >> ~/BBP/$1/$foldername/$1.txt
+  #echo -e "\n\nNext up, FDNS script!"
+  #domain="\.${1//\./\\.}\","
+  #pv /opt/2019-01-25-1548374703-fdns_any.json.gz | pigz -dc | grep -E ${domain} | jq -r .name >> ~/BBP/$1/$foldername/$1.txt
   echo -e "\n\nAnd now Certspotter!\n\n"
   curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1 >> ~/BBP/$1/$foldername/$1.txt
   discovery $1
