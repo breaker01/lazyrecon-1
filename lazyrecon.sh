@@ -5,19 +5,12 @@ discovery(){
   subdomaintakeover $1
   wappalyze $1
   screenshot $1
-  cleanup $1
   cat ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | sort -u | while read line; do
     sleep 1
     report $1 $line
     echo -e "\n$line report generated.\n\n"
     sleep 1
   done
-}
-
-cleanup(){
-  cd ~/BBP/$1/$foldername/screenshots/
-  sudo rename 's/_/-/g' -- *
-  cd $path
 }
 
 hostalive(){
