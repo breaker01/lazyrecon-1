@@ -49,8 +49,10 @@ recon(){
   sed "s/,.*//" ~/aquatone/$1/hosts.txt >> ~/BBP/$1/$foldername/$1.txt
   echo -e "\n\nNext up, DNSGrep!"
   curl -fsSL "http://dns.bufferover.run/dns?q=$1" | jq -r '.FDNS_A[],.RDNS[]' | awk -F ',' '{print $2}' | sort -u >> ~/BBP/$1/$foldername/$1.txt
-  echo -e "\n\nNext up, BinaryEdge!"
+  echo -e "\n\nNext up, Binary Edge!"
   python /opt/BinaryEdge/binaryedge.py -d $1 >> ~/BBP/$1/$foldername/$1.txt
+  echo -e "\n\nNext up, Security Trails!"
+  python /opt/Scripts/securitytrails.py -d $1 | jq '.subdomains[]' | sed 's/\"//g' | sed 's/\*\.//g' | sed -e "s/$/.$1/" >> ~/BBP/$1/$foldername/$1.txt
   #echo -e "\n\nNext up, FDNS script!"
   #domain="\.${1//\./\\.}\","
   #pv /opt/2019-01-25-1548374703-fdns_any.json.gz | pigz -dc | grep -E ${domain} | jq -r .name >> ~/BBP/$1/$foldername/$1.txt
