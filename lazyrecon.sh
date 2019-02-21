@@ -1,7 +1,6 @@
 #!/bin/bash
 
 discovery(){
-  hostalive $1
   subdomaintakeover $1
   wappalyze $1
   screenshot $1
@@ -13,22 +12,15 @@ discovery(){
   done
 }
 
-hostalive(){
-    echo -e "Checking if which hosts are online...\n\n"
-    cd /opt/httprobe/
-    cat ~/BBP/$1/$foldername/$1.txt | ./httprobe | awk -F[/:] '{print $4}' | sort -u >> ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
-    cd $path
-}
-
 wappalyze(){
     echo -e "\n\nRunning Wappalye-It\n\n"
-    python /opt/Wappalyze-it/wappalyze-it.py -i ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt -o wappalyze.txt
+    python /opt/Wappalyze-it/wappalyze-it.py -i ~/BBP/$1/$foldername/$1.txt -o wappalyze.txt
 }
 
 screenshot(){
     echo -e "\n\nTaking screenshots\n\n"
     cd /opt/aquatone/
-    cat ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt | ./aquatone --ports xlarge
+    cat ~/BBP/$1/$foldername/$1.txt | ./aquatone --ports xlarge
     cd $path
 }
 
@@ -58,8 +50,8 @@ recon(){
   #pv /opt/2019-01-25-1548374703-fdns_any.json.gz | pigz -dc | grep -E ${domain} | jq -r .name >> ~/BBP/$1/$foldername/$1.txt
   echo -e "\n\nAnd now Certspotter!\n\n"
   curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1 >> ~/BBP/$1/$foldername/$1.txt
-  discovery $1
-  cat ~/BBP/$1/$foldername/$1.txt | sort -u >> ~/BBP/$1/$foldername/$1.txt  
+  cat ~/BBP/$1/$foldername/$1.txt | sort -u >> ~/BBP/$1/$foldername/$1.txt 
+  discovery $1 
 }
 
 report(){
@@ -132,9 +124,7 @@ main(){
   mkdir ~/BBP/$1/$foldername
   mkdir ~/BBP/$1/$foldername/reports/
   mkdir ~/BBP/$1/$foldername/screenshots/
-  touch ~/BBP/$1/$foldername/unreachable.html
   touch ~/BBP/$1/$foldername/subdomain-takeover.txt
-  touch ~/BBP/$1/$foldername/responsive-$(date +"%Y-%m-%d").txt
 
     recon $1
 }
